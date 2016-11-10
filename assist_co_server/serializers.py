@@ -9,7 +9,7 @@ from rest_framework import serializers, exceptions
 from rest_framework.exceptions import ValidationError
 from rest_framework.settings import api_settings
 
-from assist_co_server.models import Client, Gender, Profession
+from assist_co_server.models import Client, Gender, Profession, TaskType
 
 class LoginSerializer(serializers.Serializer):
     """
@@ -73,3 +73,18 @@ class ClientSignupSerializer(serializers.ModelSerializer):
         except ObjectDoesNotExist:
             pass
         return phone
+
+class GenderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gender
+        fields = ('permalink', 'option_id', 'display')
+
+class ProfessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profession
+        fields = ('permalink', 'option_id', 'display')
+        
+class TaskTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskType
+        fields = ('permalink', 'option_id', 'display')
