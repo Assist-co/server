@@ -19,7 +19,7 @@ class TaskType(models.Model):
     class Meta:
         db_table = 'task_types'
 
-    option_id           = models.SmallIntegerField()
+    sort                = models.SmallIntegerField()
     display             = models.CharField(max_length=100)
     permalink           = models.CharField(db_index=True, max_length=100)
 
@@ -30,7 +30,7 @@ class Profession(models.Model):
     class Meta:
         db_table = 'professions'
 
-    option_id           = models.SmallIntegerField()
+    sort                = models.SmallIntegerField()
     display             = models.CharField(max_length=100)
     permalink           = models.CharField(db_index=True, max_length=100)
 
@@ -41,7 +41,7 @@ class Gender(models.Model):
     class Meta:
         db_table = 'genders'
 
-    option_id           = models.SmallIntegerField()
+    sort                = models.SmallIntegerField()
     display             = models.CharField(max_length=10)
     permalink           = models.CharField(db_index=True, max_length=10)
 
@@ -56,7 +56,7 @@ def upload_to(instance, filename):
 class Assistant(User):
     class Meta:
         db_table = 'assistants'
-    gender = models.OneToOneField(Gender)
+    gender = models.ForeignKey(Gender)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     profile_pic = models.ImageField(blank=True, null=True, upload_to=upload_to)
@@ -67,14 +67,14 @@ class Assistant(User):
 class Client(User):
     class Meta:
         db_table = 'clients'
-    primary_assistant = models.OneToOneField(Assistant, null=True)
+    primary_assistant = models.ForeignKey(Assistant, null=True)
     phone = PhoneNumberField(blank=True, null=True, unique=True)
-    profession = models.OneToOneField(Profession)
+    profession = models.ForeignKey(Profession)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     profile_pic = models.ImageField(blank=True, null=True, upload_to=upload_to)
     date_of_birth = models.DateField(null=False)
-    gender = models.OneToOneField(Gender, null=False)
+    gender = models.ForeignKey(Gender, null=False)
     # Use UserManager to get the create_user method, etc.
     objects = UserManager()
 
@@ -90,11 +90,12 @@ class Client(User):
 class Task(models.Model):
     class Meta:
         db_table = 'tasks'
-    client = models.OneToOneField(Client)
-    assistant = models.OneToOneField(Assistant)
+    client = models.ForeignKey(Client)
+    assistant = models.ForeignKey(Assistant, null=True)
     text = models.TextField()
-    task_type = models.OneToOneField(TaskType)
+    task_type = models.ForeignKey(TaskType, null=False)
     state = models.CharField(choices=TASK_STATES, default='ready', max_length=100)
-    completed_on = models.DateTimeField()
+    is_archived = models.BooleanField(default=False)
+    completed_on = models.DateTimeField(null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

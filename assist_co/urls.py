@@ -16,17 +16,28 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
+import rest_framework_docs
 from assist_co_server.views import *
 
-router = DefaultRouter(trailing_slash=False)
-router.register(r'^api/options/professions', ProfessionViewSet)
-router.register(r'^api/options/genders', GenderViewSet)
-router.register(r'^api/options/task-types', TaskTypeViewSet)
-
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^admin/', admin.site.urls),
+    # Add-ons
+    url(r'^docs/', include('rest_framework_docs.urls')),
+    # url(r'^admin/', admin.site.urls),
+    # Option urls
+    url(r'^api/options/professions', ProfessionsView.as_view()),
+    url(r'^api/options/genders', GendersView.as_view()),
+    url(r'^api/options/task-types', TaskTypesView.as_view()),
+    # Auth urls
     url(r'^api/login$', LoginView.as_view()),
     url(r'^api/signup$', ClientSignupView.as_view()),
     url(r'^api/logout$', LogoutView.as_view()),
+    # Client & Tasks urls
+    url(r'^api/tasks$', TasksView.as_view()),
+    url(r'^api/clients/(?P<id>[0-9]+)/tasks$', ClientTasksView.as_view()),
+    url(r'^api/clients/(?P<client_id>[0-9]+)/tasks/(?P<id>[0-9]+)$', ClientTaskDetailView.as_view()),
+    # Client urls
+    url(r'^api/clients$', ClientsView.as_view()),
+    url(r'^api/clients/(?P<id>[0-9]+)$', ClientDetailView.as_view()),
+    # Assistant urls
+    url(r'^api/assistants$', AssistantsView.as_view()),
 ]

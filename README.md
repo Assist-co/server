@@ -14,8 +14,13 @@
 5. Install project packages. Execute `pip install -r requirements.txt`
 6. Run migrations `python manage.py migrate` 
 7. Load initial data `python manage.py loaddata seed.json`
-8. Start the server `python manage.py runserver`!
+8. Create a superuser account to login : `python manage.py createsuperuser`
+9. Start the server `python manage.py runserver`!
+10. See documentation at `http://localhost:8000/docs`
 
 ## Tools
 
 Assist-Co Server is based on the [Django-Rest-Framework](http://www.django-rest-framework.org)
+
+### TODO
+1. Add support for images (profile images and urls)

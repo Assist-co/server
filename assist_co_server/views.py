@@ -3,19 +3,22 @@ from django.utils import timezone
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from rest_framework.authtoken import views as rest_views
-from rest_framework import viewsets
+from rest_framework import viewsets, generics, mixins, views, status
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 from assist_co_server import serializers, paginators
-from assist_co_server.models import Client, Gender, TaskType, Profession
+from assist_co_server.models import Client, Gender, TaskType, Profession, Task, Assistant
 
 class LoginView(rest_views.ObtainAuthToken):
-
+    """
+    POST
+    Log user in by returning their token
+    """
     def post(self, request, *args, **kwargs):
         serializer = serializers.LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -27,15 +30,22 @@ class LoginView(rest_views.ObtainAuthToken):
         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class LogoutView(APIView):
+    """
+    DELETE
+    Delete the users Token
+    """
     def delete(self, request, *args, **kwargs):
         token, created = Token.objects.get_or_create(user=request.user)
         token.delete()
         return Response({'success': True})
 
 class ClientSignupView(APIView):
-
+    """
+    POST
+    Sign the client up and return a valid token for authenticating to server
+    """
     def post(self, request, *args, **kwargs):
-        serializer = serializers.ClientSignupSerializer(data=request.data)
+        serializer = serializers.ClientSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
             client = models.Client.objects.create(
@@ -54,26 +64,153 @@ class ClientSignupView(APIView):
         else:
             return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
-class GenderViewSet(viewsets.ReadOnlyModelViewSet):
+class GendersView(generics.ListAPIView):
     """
-    This class provides list and detail actions
+    GET
+    Get all the gender options in db
     """
     queryset = Gender.objects.all()
     serializer_class = serializers.GenderSerializer
     pagination_class = paginators.StandardResultsSetPagination
 
-class TaskTypeViewSet(viewsets.ReadOnlyModelViewSet):
+class TaskTypesView(generics.ListAPIView):
     """
-    This class provides list and detail actions
+    GET
+    Get all the task type options in db
     """
     queryset = TaskType.objects.all()
     serializer_class = serializers.TaskTypeSerializer
     pagination_class = paginators.StandardResultsSetPagination
 
-class ProfessionViewSet(viewsets.ReadOnlyModelViewSet):
+class ProfessionsView(generics.ListAPIView):
     """
-    This class provides list and detail actions
+    GET
+    Get all the Profession options
     """
     queryset = Profession.objects.all()
     serializer_class = serializers.ProfessionSerializer
     pagination_class = paginators.StandardResultsSetPagination
+
+class TasksView(generics.ListAPIView):
+    """
+    GET
+    Get all the tasks in db including archived tasks
+    """
+    queryset = Task.objects.all()
+    serializer_class = serializers.TaskSerializer
+    pagination_class = paginators.StandardResultsSetPagination
+
+class AssistantsView(generics.ListAPIView,
+                    generics.CreateAPIView):
+
+    """
+    GET, POST
+    List or Create an Assistant. Should only be used by admin not mobile.
+    """
+    serializer_class = serializers.AssistantSerializer
+    pagination_class = paginators.StandardResultsSetPagination
+    queryset = Assistant.objects.all()
+
+class AssistantDetailView(generics.RetrieveUpdateAPIView):
+    """
+    GET, PATCH, DELETE
+    Get, update, or delete specified assistant
+    """
+    serializer_class = serializers.AssistantSerializer
+
+    def get_object(self):
+        assistant = get_object_or_404(Assistant, id=self.kwargs['id'])
+        return assistant
+
+    def partial_update(self, request, *args, **kwargs):
+        """
+        PATCH
+        Update some or all of the fields for the assistant
+        """
+        assistant = self.get_object()
+        serializer = serializers.AssistantSerializer(assistant, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ClientsView(generics.ListAPIView):
+    """
+    GET
+    Get all the clients in db
+    """
+    queryset = Client.objects.all()
+    serializer_class = serializers.ClientSerializer
+    pagination_class = paginators.StandardResultsSetPagination
+
+class ClientDetailView(generics.RetrieveUpdateAPIView):
+    """
+    GET, PATCH
+    Get, Patch specific user in db
+    """
+    serializer_class = serializers.ClientSerializer
+    def get_object(self):
+        client = get_object_or_404(Client, id=self.kwargs['id'], is_active=True)
+        return client
+
+    def partial_update(self, request, *args, **kwargs):
+        """
+        PATCH
+        Update some or all of the fields for the client
+        """
+        client = self.get_object()
+        serializer = serializers.ClientSerializer(client, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ClientTasksView(generics.ListAPIView,
+                    generics.CreateAPIView):
+    """
+    GET, POST
+    List or Create a Task for a specific user
+    """
+    serializer_class = serializers.TaskSerializer
+    pagination_class = paginators.StandardResultsSetPagination
+
+    def get_queryset(self):
+        # Return all the tasks that belong to the client
+        return Task.objects.filter(client_id=self.kwargs['id'], is_archived=False)
+
+class ClientTaskDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET, PATCH, DELETE
+    Get, update, or delete specified task owned by specific client
+    """
+    serializer_class = serializers.TaskSerializer
+
+    def get_object(self):
+        task = get_object_or_404(Task, client_id=self.kwargs['client_id'],
+            id=self.kwargs['id'], is_archived=False)
+        return task
+
+    def partial_update(self, request, *args, **kwargs):
+        """
+        PATCH
+        Update some or all of the fields for the task
+        """
+        task = self.get_object()
+        serializer = serializers.TaskSerializer(task, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        """
+        DELETE
+        Set Task to archived
+        """
+        task = self.get_object()
+        task.is_archived = True
+        task.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)

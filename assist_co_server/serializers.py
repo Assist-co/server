@@ -9,8 +9,21 @@ from rest_framework import serializers, exceptions
 from rest_framework.exceptions import ValidationError
 from rest_framework.settings import api_settings
 
-from assist_co_server.models import Client, Gender, Profession, TaskType
+from assist_co_server.models import Client, Gender, Profession, TaskType, Task
 
+class GenderField(serializers.RelatedField):
+    """
+    Custom Gender field 
+    """
+    def to_representation(self, value):
+        return {'permalink': value.permalink, 'sort': value.sort, 'display': value.display}
+
+    def to_internal_value(self, data):
+        return Gender.objects.get(permalink=data)
+
+    def get_queryset(self):
+        return Gender.objects.all()
+        
 class LoginSerializer(serializers.Serializer):
     """
     Login client serializer
@@ -39,18 +52,55 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
-class ClientSignupSerializer(serializers.ModelSerializer):
+class AssistantSerializer(serializers.ModelSerializer):
     """
-    Register client serializer
+    Assistant serializer
     """
     first_name              = serializers.CharField(allow_blank=False, required=True)
     last_name               = serializers.CharField(allow_blank=False, required=True)
     password                = serializers.CharField(allow_blank=False, required=True, write_only=True)
     email                   = serializers.EmailField(max_length=200, allow_blank=False, required=True)
-    gender                  = serializers.SlugRelatedField(many=False, slug_field='permalink', queryset=Gender.objects.all())
+    gender                  = GenderField(many=False)
+    date_of_birth           = serializers.DateField(required=True)
+
+    class Meta:
+        model = Client
+        fields = ('email', 'password','first_name', 'last_name', 'date_of_birth', 'gender')
+
+
+    def validate_email(self, email):
+        try:
+            u = User.objects.get(email=email.lower())
+            raise exceptions.ValidationError('Email already exists')
+        except ObjectDoesNotExist:
+            pass
+        return email.lower()
+
+class ProfessionField(serializers.RelatedField):
+    """
+    Custom Profession field 
+    """
+    def to_representation(self, value):
+        return {'permalink': value.permalink, 'sort': value.sort, 'display': value.display}
+
+    def to_internal_value(self, data):
+        return Profession.objects.get(permalink=data)
+
+    def get_queryset(self):
+        return Profession.objects.all()
+
+class ClientSerializer(serializers.ModelSerializer):
+    """
+    Client serializer
+    """
+    first_name              = serializers.CharField(allow_blank=False, required=True)
+    last_name               = serializers.CharField(allow_blank=False, required=True)
+    password                = serializers.CharField(allow_blank=False, required=True, write_only=True)
+    email                   = serializers.EmailField(max_length=200, allow_blank=False, required=True)
+    gender                  = GenderField(many=False)
     date_of_birth           = serializers.DateField(required=True)
     phone                   = serializers.CharField(allow_blank=False, required=True)
-    profession              = serializers.SlugRelatedField(many=False, slug_field='permalink', queryset=Profession.objects.all())
+    profession              = ProfessionField(many=False)
 
     class Meta:
         model = Client
@@ -77,14 +127,49 @@ class ClientSignupSerializer(serializers.ModelSerializer):
 class GenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gender
-        fields = ('permalink', 'option_id', 'display')
+        fields = ('permalink', 'sort', 'display')
 
 class ProfessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profession
-        fields = ('permalink', 'option_id', 'display')
-        
+        fields = ('permalink', 'sort', 'display')
+
 class TaskTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskType
-        fields = ('permalink', 'option_id', 'display')
+        fields = ('permalink', 'sort', 'display')
+
+class TaskTypeField(serializers.RelatedField):
+    """
+    Custom TaskType field 
+    """
+    def to_representation(self, value):
+        return {'permalink': value.permalink, 'sort': value.sort, 'display': value.display}
+
+    def to_internal_value(self, data):
+        return TaskType.objects.get(permalink=data)
+
+    def get_queryset(self):
+        return TaskType.objects.all()
+
+class TaskSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Task
+    """
+    task_type = TaskTypeField(many=False)
+    client = ClientSerializer(many=False, read_only=True)
+    client_id = serializers.SlugRelatedField(many=False, slug_field='id', 
+        queryset=Client.objects.all(), write_only=True)
+    assistant = AssistantSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Task
+        fields = ('id', 'text', 'task_type', 'client', 'client_id', 
+            'state','completed_on', 'created_on', 'assistant')
+
+    def create(self, attrs):
+        return Task.objects.create(
+            text=attrs['text'], 
+            client_id=attrs['client_id'].id, 
+            task_type_id=attrs['task_type'].id,
+        )
