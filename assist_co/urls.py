@@ -15,14 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+
 from rest_framework.routers import DefaultRouter
+
 import rest_framework_docs
 from assist_co_server.views import *
 
+
+schema_view = get_schema_view(title="Server Monitoring API")
+
 urlpatterns = [
     # Add-ons
-    url(r'^docs/', include('rest_framework_docs.urls')),
-    # url(r'^admin/', admin.site.urls),
+    # url(r'^docs/', include('rest_framework_docs.urls')),
+
     # Option urls
     url(r'^api/options/professions', ProfessionsView.as_view()),
     url(r'^api/options/genders', GendersView.as_view()),

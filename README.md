@@ -22,5 +22,21 @@
 
 Assist-Co Server is based on the [Django-Rest-Framework](http://www.django-rest-framework.org)
 
-### TODO
+
+## Requests
+
+### Authentication
+
+By default in development authentication is turned off designated by the `DEBUG=True`
+in the settings.py file. To turn on authentication set `DEBUG=False` and Token
+authentication will be on. At this point you will need to pass in the Token as
+a header. 
+
+`Authorization: Token ae5595db528c4813c4810231cedd3e8290f4b83c`
+
+Where the key is `Authorization` and the value is `Token <token>`
+
+
+## TODO
 1. Add support for images (profile images and urls)
+2. Missing waking hours field on Client
