@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from assist_co_server import serializers, paginators
 from assist_co_server.models import Client, Gender, TaskType, Profession, Task, Assistant
 
+
 class LoginView(rest_views.ObtainAuthToken):
     """
     POST
@@ -29,6 +30,7 @@ class LoginView(rest_views.ObtainAuthToken):
             return Response({'token': token.key})
         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
+
 class LogoutView(APIView):
     """
     DELETE
@@ -38,6 +40,7 @@ class LogoutView(APIView):
         token, created = Token.objects.get_or_create(user=request.user)
         token.delete()
         return Response({'success': True})
+
 
 class ClientSignupView(APIView):
     """
@@ -64,6 +67,7 @@ class ClientSignupView(APIView):
         else:
             return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class GendersView(generics.ListAPIView):
     """
     GET
@@ -72,6 +76,7 @@ class GendersView(generics.ListAPIView):
     queryset = Gender.objects.all()
     serializer_class = serializers.GenderSerializer
     pagination_class = paginators.StandardResultsSetPagination
+
 
 class TaskTypesView(generics.ListAPIView):
     """
@@ -82,6 +87,7 @@ class TaskTypesView(generics.ListAPIView):
     serializer_class = serializers.TaskTypeSerializer
     pagination_class = paginators.StandardResultsSetPagination
 
+
 class ProfessionsView(generics.ListAPIView):
     """
     GET
@@ -91,6 +97,7 @@ class ProfessionsView(generics.ListAPIView):
     serializer_class = serializers.ProfessionSerializer
     pagination_class = paginators.StandardResultsSetPagination
 
+
 class TasksView(generics.ListAPIView):
     """
     GET
@@ -99,6 +106,7 @@ class TasksView(generics.ListAPIView):
     queryset = Task.objects.all()
     serializer_class = serializers.TaskSerializer
     pagination_class = paginators.StandardResultsSetPagination
+
 
 class AssistantsView(generics.ListAPIView,
                     generics.CreateAPIView):
@@ -110,6 +118,7 @@ class AssistantsView(generics.ListAPIView,
     serializer_class = serializers.AssistantSerializer
     pagination_class = paginators.StandardResultsSetPagination
     queryset = Assistant.objects.all()
+
 
 class AssistantDetailView(generics.RetrieveUpdateAPIView):
     """
@@ -135,6 +144,7 @@ class AssistantDetailView(generics.RetrieveUpdateAPIView):
         else:
             return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ClientsView(generics.ListAPIView):
     """
     GET
@@ -143,6 +153,7 @@ class ClientsView(generics.ListAPIView):
     queryset = Client.objects.all()
     serializer_class = serializers.ClientSerializer
     pagination_class = paginators.StandardResultsSetPagination
+
 
 class ClientDetailView(generics.RetrieveUpdateAPIView):
     """
@@ -167,6 +178,7 @@ class ClientDetailView(generics.RetrieveUpdateAPIView):
         else:
             return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ClientTasksView(generics.ListAPIView,
                     generics.CreateAPIView):
     """
@@ -179,6 +191,7 @@ class ClientTasksView(generics.ListAPIView,
     def get_queryset(self):
         # Return all the tasks that belong to the client
         return Task.objects.filter(client_id=self.kwargs['id'], is_archived=False)
+
 
 class ClientTaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
