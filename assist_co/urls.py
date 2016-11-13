@@ -22,27 +22,30 @@ import rest_framework_docs
 from assist_co_server.views import *
 
 
-schema_view = get_schema_view(title="Server Monitoring API")
-
 urlpatterns = [
     # Add-ons
-    # url(r'^docs/', include('rest_framework_docs.urls')),
+    url(r'^docs/', include('rest_framework_docs.urls')),
 
     # Option urls
     url(r'^api/options/professions', ProfessionsView.as_view()),
     url(r'^api/options/genders', GendersView.as_view()),
     url(r'^api/options/task-types', TaskTypesView.as_view()),
+
     # Auth urls
     url(r'^api/login$', LoginView.as_view()),
     url(r'^api/signup$', ClientSignupView.as_view()),
     url(r'^api/logout$', LogoutView.as_view()),
+
     # Client & Tasks urls
     url(r'^api/tasks$', TasksView.as_view()),
     url(r'^api/clients/(?P<id>[0-9]+)/tasks$', ClientTasksView.as_view()),
     url(r'^api/clients/(?P<client_id>[0-9]+)/tasks/(?P<id>[0-9]+)$', ClientTaskDetailView.as_view()),
+
     # Client urls
     url(r'^api/clients$', ClientsView.as_view()),
     url(r'^api/clients/(?P<id>[0-9]+)$', ClientDetailView.as_view()),
+    
     # Assistant urls
     url(r'^api/assistants$', AssistantsView.as_view()),
+    url(r'^api/assistants/(?P<id>[0-9]+)$', AssistantDetailView.as_view()), 
 ]
