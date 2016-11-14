@@ -490,7 +490,7 @@
     "pk": 2,
     "fields": {
       "password": "testing",
-      "last_login": "2016-11-10T01:18:16.329Z",
+      "last_login": "2016-11-14T15:32:40.284Z",
       "is_superuser": false,
       "username": "",
       "first_name": "Johnny",
@@ -514,9 +514,45 @@
       "first_name": "assist",
       "last_name": "co",
       "email": "assist_co@apple.com",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2016-11-10T02:00:03.682Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$30000$f9LRd1z05WKX$NMUFaRylEIYuJxytjIeXky3AlxIB6Wx457gDXa4ohHg=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin@gmail.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2016-11-10T21:46:11.566Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 9,
+    "fields": {
+      "password": "testing",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "cketant@apple.com",
+      "first_name": "johnny",
+      "last_name": "appleseed",
+      "email": "cketant@apple.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2016-11-14T15:32:40.290Z",
       "groups": [],
       "user_permissions": []
     }
@@ -527,6 +563,14 @@
     "fields": {
       "user": 6,
       "created": "2016-11-10T02:00:03.726Z"
+    }
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "36abc6873bc9c62c92ef6fc52ba5e458c3e242cb",
+    "fields": {
+      "user": 9,
+      "created": "2016-11-14T15:32:40.355Z"
     }
   },
   {
@@ -570,6 +614,22 @@
     }
   },
   {
+    "model": "assist_co_server.client",
+    "pk": 9,
+    "fields": {
+      "primary_assistant": null,
+      "phone": "+17182330403",
+      "profession": 3,
+      "created_on": "2016-11-14T15:32:40.330Z",
+      "updated_on": "2016-11-14T15:32:40.330Z",
+      "profile_pic": "",
+      "date_of_birth": "1991-04-25",
+      "gender": 2,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
     "model": "assist_co_server.task",
     "pk": 2,
     "fields": {
@@ -578,6 +638,7 @@
       "text": "Testing2",
       "task_type": 1,
       "state": "ready",
+      "is_complete": false,
       "is_archived": false,
       "completed_on": null,
       "created_on": "2016-11-10T19:12:14.162Z",
@@ -593,6 +654,7 @@
       "text": "Testing2",
       "task_type": 1,
       "state": "ready",
+      "is_complete": false,
       "is_archived": false,
       "completed_on": null,
       "created_on": "2016-11-10T19:20:21.407Z",
@@ -608,6 +670,7 @@
       "text": "Testing3",
       "task_type": 1,
       "state": "ready",
+      "is_complete": false,
       "is_archived": false,
       "completed_on": null,
       "created_on": "2016-11-10T19:27:24.972Z",
@@ -623,6 +686,7 @@
       "text": "Testing3",
       "task_type": 1,
       "state": "ready",
+      "is_complete": false,
       "is_archived": false,
       "completed_on": null,
       "created_on": "2016-11-10T19:48:21.226Z",
@@ -638,6 +702,7 @@
       "text": "Testing5",
       "task_type": 1,
       "state": "ready",
+      "is_complete": false,
       "is_archived": false,
       "completed_on": null,
       "created_on": "2016-11-10T20:14:08.657Z",
@@ -653,6 +718,7 @@
       "text": "Testing10",
       "task_type": 3,
       "state": "ready",
+      "is_complete": false,
       "is_archived": true,
       "completed_on": null,
       "created_on": "2016-11-10T20:15:36.123Z",
