@@ -101,11 +101,11 @@ class ClientSerializer(serializers.ModelSerializer):
     date_of_birth           = serializers.DateField(required=True)
     phone                   = serializers.CharField(allow_blank=False, required=True)
     profession              = ProfessionField(many=False)
-
+    primary_assistant       = AssistantSerializer(many=False)
     class Meta:
         model = Client
         fields = ('email', 'password','first_name', 'last_name', 'date_of_birth', 
-            'date_of_birth', 'gender', 'phone', 'profession')
+            'date_of_birth', 'gender', 'phone', 'profession', 'primary_assistant')
 
 
     def validate_email(self, email):

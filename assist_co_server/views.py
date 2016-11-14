@@ -21,6 +21,7 @@ class LoginView(rest_views.ObtainAuthToken):
     Log user in by returning their token
     """
     def post(self, request, *args, **kwargs):
+        print(request.data)
         serializer = serializers.LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
@@ -28,7 +29,7 @@ class LoginView(rest_views.ObtainAuthToken):
             user.last_login = timezone.now()
             user.save()
             return Response({'token': token.key})
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutView(APIView):
@@ -155,10 +156,10 @@ class ClientsView(generics.ListAPIView):
     pagination_class = paginators.StandardResultsSetPagination
 
 
-class ClientDetailView(generics.RetrieveUpdateAPIView):
+class ClientDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
-    GET, PATCH
-    Get, Patch specific user in db
+    GET, PATCH, DELETE
+    Get, Patch, DELETE(set to inactive) specific user in db
     """
     serializer_class = serializers.ClientSerializer
     def get_object(self):
@@ -178,6 +179,15 @@ class ClientDetailView(generics.RetrieveUpdateAPIView):
         else:
             return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def destroy(self, request, *args, **kwargs):
+        """
+        DELETE
+        Set Client to inactive
+        """
+        client = self.get_object()
+        client.is_active = False
+        client.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ClientTasksView(generics.ListAPIView,
                     generics.CreateAPIView):

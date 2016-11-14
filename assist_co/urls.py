@@ -27,9 +27,9 @@ urlpatterns = [
     url(r'^docs/', include('rest_framework_docs.urls')),
 
     # Option urls
-    url(r'^api/options/professions', ProfessionsView.as_view()),
-    url(r'^api/options/genders', GendersView.as_view()),
-    url(r'^api/options/task-types', TaskTypesView.as_view()),
+    url(r'^api/option/professions', ProfessionsView.as_view()),
+    url(r'^api/option/genders', GendersView.as_view()),
+    url(r'^api/option/task-types', TaskTypesView.as_view()),
 
     # Auth urls
     url(r'^api/login$', LoginView.as_view()),
