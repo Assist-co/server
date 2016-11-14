@@ -65,7 +65,6 @@ class ClientSignupView(APIView):
             token = client.get_or_create_token()
             return Response({'token': token.key}, status=status.HTTP_200_OK)
         else:
-            print(serializer._errors)
             return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
 
