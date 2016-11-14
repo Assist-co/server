@@ -21,7 +21,6 @@ class LoginView(rest_views.ObtainAuthToken):
     Log user in by returning their token
     """
     def post(self, request, *args, **kwargs):
-        print(request.data)
         serializer = serializers.LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
@@ -52,7 +51,7 @@ class ClientSignupView(APIView):
         serializer = serializers.ClientSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
-            client = models.Client.objects.create(
+            client = Client.objects.create(
                 username=data['email'],
                 email=data['email'],
                 password=data['password'],
@@ -66,6 +65,7 @@ class ClientSignupView(APIView):
             token = client.get_or_create_token()
             return Response({'token': token.key}, status=status.HTTP_200_OK)
         else:
+            print(serializer._errors)
             return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
 

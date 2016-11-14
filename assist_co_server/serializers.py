@@ -101,11 +101,13 @@ class ClientSerializer(serializers.ModelSerializer):
     date_of_birth           = serializers.DateField(required=True)
     phone                   = serializers.CharField(allow_blank=False, required=True)
     profession              = ProfessionField(many=False)
-    primary_assistant       = AssistantSerializer(many=False)
+    primary_assistant       = AssistantSerializer(many=False, read_only=True)
+    created_on              = serializers.DateTimeField(read_only=True)
     class Meta:
         model = Client
         fields = ('email', 'password','first_name', 'last_name', 'date_of_birth', 
-            'date_of_birth', 'gender', 'phone', 'profession', 'primary_assistant')
+            'date_of_birth', 'gender', 'phone', 'profession', 'primary_assistant',
+            'created_on')
 
 
     def validate_email(self, email):
@@ -165,7 +167,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'text', 'task_type', 'client', 'client_id', 
-            'state','completed_on', 'created_on', 'assistant')
+            'state','completed_on', 'created_on', 'assistant', 'is_complete')
 
     def create(self, attrs):
         return Task.objects.create(

@@ -95,6 +95,7 @@ class Task(models.Model):
     text = models.TextField()
     task_type = models.ForeignKey(TaskType, null=False)
     state = models.CharField(choices=TASK_STATES, default='ready', max_length=100)
+    is_complete = models.BooleanField(default=False) 
     is_archived = models.BooleanField(default=False)
     completed_on = models.DateTimeField(null=True)
     created_on = models.DateTimeField(auto_now_add=True)
