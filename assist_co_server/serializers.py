@@ -105,7 +105,7 @@ class ClientSerializer(serializers.ModelSerializer):
     created_on              = serializers.DateTimeField(read_only=True)
     class Meta:
         model = Client
-        fields = ('email', 'password','first_name', 'last_name', 'date_of_birth', 
+        fields = ('id', 'email', 'password','first_name', 'last_name', 'date_of_birth', 
             'date_of_birth', 'gender', 'phone', 'profession', 'primary_assistant',
             'created_on')
 
