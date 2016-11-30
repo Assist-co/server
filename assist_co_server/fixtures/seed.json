@@ -27,6 +27,33 @@
     }
   },
   {
+    "model": "assist_co_server.tasktype",
+    "pk": 4,
+    "fields": {
+      "sort": 3,
+      "display": "Reminder",
+      "permalink": "reminder"
+    }
+  },
+  {
+    "model": "assist_co_server.tasktype",
+    "pk": 5,
+    "fields": {
+      "sort": 4,
+      "display": "Inquiry",
+      "permalink": "inquiry"
+    }
+  },
+  {
+    "model": "assist_co_server.tasktype",
+    "pk": 6,
+    "fields": {
+      "sort": 5,
+      "display": "Other",
+      "permalink": "other"
+    }
+  },
+  {
     "model": "assist_co_server.profession",
     "pk": 1,
     "fields": {
