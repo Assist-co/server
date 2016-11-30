@@ -151,14 +151,14 @@ class TaskTypeField(serializers.RelatedField):
     def to_internal_value(self, data):
         return TaskType.objects.get(permalink=data)
 
-    def get_queryset(self):
-        return TaskType.objects.all()
+    def queryset(self):
+        return [t.permalink for t in TaskType.objects.all()]
 
 class TaskSerializer(serializers.ModelSerializer):
     """
     Serializer for Task
     """
-    task_type = TaskTypeField(many=False)
+    task_type = TaskTypeField(many=False, required=True)
     client = ClientSerializer(many=False, read_only=True)
     client_id = serializers.SlugRelatedField(many=False, slug_field='id', 
         queryset=Client.objects.all(), write_only=True)
@@ -168,6 +168,12 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = ('id', 'text', 'task_type', 'client', 'client_id', 
             'state','completed_on', 'created_on', 'assistant', 'is_complete')
+
+    def validate_task_type(self, task_type):
+        if not task_type.permalink in [t.permalink for t in TaskType.objects.all()]:
+            raise exceptions.ValidationError('No task type exists for permalink {}'.format(task_type.permalink))
+        return task_type
+
 
     def create(self, attrs):
         return Task.objects.create(

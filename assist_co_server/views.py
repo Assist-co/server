@@ -98,9 +98,10 @@ class ProfessionsView(generics.ListAPIView):
     pagination_class = paginators.StandardResultsSetPagination
 
 
-class TasksView(generics.ListAPIView):
+class TasksView(generics.ListAPIView,
+                generics.CreateAPIView):
     """
-    GET
+    GET, POST
     Get all the tasks in db including archived tasks
     """
     queryset = Task.objects.all()
@@ -188,10 +189,9 @@ class ClientDetailView(generics.RetrieveUpdateDestroyAPIView):
         client.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class ClientTasksView(generics.ListAPIView,
-                    generics.CreateAPIView):
+class ClientTasksView(generics.ListAPIView):
     """
-    GET, POST
+    GET
     List or Create a Task for a specific user
     """
     serializer_class = serializers.TaskSerializer
