@@ -12,8 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from assist_co_server import serializers, paginators
-from assist_co_server.models import Client, Gender, TaskType, Profession, Task, Assistant
-
+from assist_co_server.models import Client, Gender, TaskType, Profession, Task, Assistant, Contact
 
 class LoginView(rest_views.ObtainAuthToken):
     """
@@ -145,6 +144,69 @@ class AssistantDetailView(generics.RetrieveUpdateAPIView):
         else:
             return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ContactsView(generics.CreateAPIView):
+    """
+    POST
+    Create Contact
+    """
+    serializer_class = serializers.ContactSerializer
+
+class ContactDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET, PATCH/UPDATE, DELETE
+    Contact
+    """
+    serializer_class = serializers.ContactSerializer
+    def get_object(self):
+        contact = get_object_or_404(Contact, id=self.kwargs['id'])
+        return contact
+ 
+class TaskContactsView(APIView):
+    """
+    POST
+    Add Contacts to task
+    """
+
+    def post(self, request, *args, **kwargs):
+        """
+        Pass in array of Contact json objects create the contacts then add to the Task
+        OR
+        Pass in array of Contact ids and add the contacts to the Task
+        """
+        # get the task for this request
+        task = get_object_or_404(Task, id=self.kwargs['id'], is_archived=False)
+        contact_objs = []
+        contacts = request.data['contacts']
+        curr_task_contacts = task.contacts
+        # check if we have array of objects or ids
+        if type(contacts[0]) is dict:
+            # We have Contact json objects
+            # Create Contact objects if it doesn't already exist
+            for contact_attrs in contacts:
+                contact = Contact.get_or_create_by_attrs(contact_attrs)
+                if curr_task_contacts.filter(id=contact.id).count() == 0:
+                    contact_objs.append(contact)
+        else:
+            # we have contact ids
+            contacts_set = Contact.objects.filter(pk__in=contacts)
+            if len(contacts) != contacts_set.count():
+                return Response("Contact does not exist for one or more IDs provided", status=status.HTTP_400_BAD_REQUEST)
+            for contact in contacts_set:
+                if curr_task_contacts.filter(id=contact.id).count() == 0:
+                    contact_objs.append(contact)
+
+        if len(contact_objs) > 0:
+            task.contacts.add(*contact_objs)
+            task.save()
+        return Response(serializers.TaskSerializer(task).data)
+
+    def get(self, request, *args, **kwargs):
+        """
+        Get all the contacts for this Task
+        """
+        task = get_object_or_404(Task, id=self.kwargs['id'], is_archived=False)
+        serializer = serializers.ContactSerializer(task.contacts, many=True)
+        return Response(serializer.data)
 
 class ClientsView(generics.ListAPIView):
     """
@@ -154,7 +216,6 @@ class ClientsView(generics.ListAPIView):
     queryset = Client.objects.all()
     serializer_class = serializers.ClientSerializer
     pagination_class = paginators.StandardResultsSetPagination
-
 
 class ClientDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -200,7 +261,6 @@ class ClientTasksView(generics.ListAPIView):
     def get_queryset(self):
         # Return all the tasks that belong to the client
         return Task.objects.filter(client_id=self.kwargs['id'], is_archived=False)
-
 
 class ClientTaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     """

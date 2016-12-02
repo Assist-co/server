@@ -87,12 +87,45 @@ class Client(User):
         """
         return Token.objects.get_or_create(user=self.user_ptr)[0]
 
+class Contact(models.Model):
+    class Meta:
+        db_table = 'contacts'
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = PhoneNumberField(blank=True, null=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    client = models.ForeignKey(Client, null=True, default=None)
+
+    @classmethod
+    def get_or_create_by_attrs(self, contact_attrs):
+        """
+        Create contact object if it doesn't already exist
+        """
+        if contact_attrs['email']:
+            try:
+                contact = self.objects.get(email=contact_attrs['email'], client_id=contact_attrs['client_id'])
+                return contact
+            except :
+                # create contact
+                return self.objects.create(**contact_attrs)
+        else:
+            try:
+                contact = self.objects.get(phone=contact_attrs['phone'], client_id=contact_attrs['client_id'])
+                return contact
+            except:
+                # create contact
+                return self.objects.create(**contact_attrs)
+
 class Task(models.Model):
     class Meta:
         db_table = 'tasks'
     client = models.ForeignKey(Client)
     assistant = models.ForeignKey(Assistant, null=True)
     text = models.TextField()
+    location = models.CharField(null=True, max_length=30) # (40.76,-73.984)
+    contacts = models.ManyToManyField(Contact)
     task_type = models.ForeignKey(TaskType, null=False)
     state = models.CharField(choices=TASK_STATES, default='ready', max_length=100)
     is_complete = models.BooleanField(default=False) 

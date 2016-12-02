@@ -9,7 +9,7 @@ from rest_framework import serializers, exceptions
 from rest_framework.exceptions import ValidationError
 from rest_framework.settings import api_settings
 
-from assist_co_server.models import Client, Gender, Profession, TaskType, Task
+from assist_co_server.models import Client, Gender, Profession, TaskType, Task, Contact
 
 class GenderField(serializers.RelatedField):
     """
@@ -126,6 +126,36 @@ class ClientSerializer(serializers.ModelSerializer):
             pass
         return phone
 
+    def validate_profession(self, profession):
+        if not profession.permalink in [p.permalink for p in Profession.objects.all()]:
+            raise exceptions.ValidationError('No profession exists for permalink {}'.format(profession.permalink))
+        return profession
+
+class ContactSerializer(serializers.ModelSerializer):
+    client_id = serializers.SlugRelatedField(many=False, slug_field='id', 
+        queryset=Client.objects.all(), write_only=True)
+
+    def validate(self, attrs):
+        phone = attrs['phone']
+        email = attrs['email']
+
+        if not phone and not email:
+            raise exceptions.ValidationError('Must include email and/or phone number for contact')
+        return attrs
+
+    class Meta:
+        model = Contact
+        fields = ('id', 'first_name', 'last_name', 'email', 'phone', 'client_id')
+
+    def create(self, attrs):
+        return Contact.objects.create(
+            first_name=attrs['first_name'],
+            last_name=attrs['last_name'],
+            email=attrs['email'],
+            phone=attrs['phone'],
+            client_id=attrs['client_id'].id,
+        )
+
 class GenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gender
@@ -163,10 +193,11 @@ class TaskSerializer(serializers.ModelSerializer):
     client_id = serializers.SlugRelatedField(many=False, slug_field='id', 
         queryset=Client.objects.all(), write_only=True)
     assistant = AssistantSerializer(many=False, read_only=True)
-
+    contacts = ContactSerializer(many=True, read_only=True)
+    
     class Meta:
         model = Task
-        fields = ('id', 'text', 'task_type', 'client', 'client_id', 
+        fields = ('id', 'text', 'location', 'task_type', 'contacts', 'client', 'client_id', 
             'state','completed_on', 'created_on', 'assistant', 'is_complete')
 
     def validate_task_type(self, task_type):
@@ -174,10 +205,10 @@ class TaskSerializer(serializers.ModelSerializer):
             raise exceptions.ValidationError('No task type exists for permalink {}'.format(task_type.permalink))
         return task_type
 
-
     def create(self, attrs):
         return Task.objects.create(
             text=attrs['text'], 
             client_id=attrs['client_id'].id, 
             task_type_id=attrs['task_type'].id,
+            location=attrs['location']
         )

@@ -36,10 +36,16 @@ urlpatterns = [
     url(r'^api/signup$', ClientSignupView.as_view()),
     url(r'^api/logout$', LogoutView.as_view()),
 
-    # Client & Tasks urls
+    # Tasks urls
     url(r'^api/tasks$', TasksView.as_view()),
     url(r'^api/clients/(?P<id>[0-9]+)/tasks$', ClientTasksView.as_view()),
     url(r'^api/clients/(?P<client_id>[0-9]+)/tasks/(?P<id>[0-9]+)$', ClientTaskDetailView.as_view()),
+
+    # Contacts urls
+    url(r'^api/contacts$', ContactsView.as_view()),
+    url(r'^api/contacts/(?P<id>[0-9]+)$', ContactDetailView.as_view()),
+    url(r'^api/tasks/(?P<id>[0-9]+)/contacts$', TaskContactsView.as_view()),
+    # url(r'^api/tasks/(?P<task_id>[0-9]+)/contacts/(?P<id>[0-9]+)$', TaskContactsView.as_view()),
 
     # Client urls
     url(r'^api/clients$', ClientsView.as_view()),
