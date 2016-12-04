@@ -210,7 +210,7 @@ class TaskSerializer(serializers.ModelSerializer):
             text=attrs['text'], 
             client_id=attrs['client_id'].id, 
             task_type_id=attrs['task_type'].id,
-            location=attrs['location'],
-            start_on=attrs['start_on'],
-            end_on=attrs['end_on']
+            location=attrs['location'] if 'location' in attrs else None,
+            start_on=attrs['start_on'] if 'start_on' in attrs else None,
+            end_on=attrs['end_on'] if 'end_on' in attrs else None,
         )
