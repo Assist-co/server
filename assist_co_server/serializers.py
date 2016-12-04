@@ -210,5 +210,5 @@ class TaskSerializer(serializers.ModelSerializer):
             text=attrs['text'], 
             client_id=attrs['client_id'].id, 
             task_type_id=attrs['task_type'].id,
-            location=attrs['location']
+            location=attrs['location'] if 'location' in attrs else None
         )
