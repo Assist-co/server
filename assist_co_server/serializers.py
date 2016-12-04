@@ -198,7 +198,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'text', 'location', 'task_type', 'contacts', 'client', 'client_id', 
-            'state','completed_on', 'created_on', 'assistant', 'is_complete')
+            'state', 'start_on', 'end_on', 'completed_on', 'created_on', 'assistant', 'is_complete')
 
     def validate_task_type(self, task_type):
         if not task_type.permalink in [t.permalink for t in TaskType.objects.all()]:
@@ -210,5 +210,7 @@ class TaskSerializer(serializers.ModelSerializer):
             text=attrs['text'], 
             client_id=attrs['client_id'].id, 
             task_type_id=attrs['task_type'].id,
-            location=attrs['location']
+            location=attrs['location'],
+            start_on=attrs['start_on'],
+            end_on=attrs['end_on']
         )
