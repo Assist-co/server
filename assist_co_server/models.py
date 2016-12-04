@@ -130,6 +130,8 @@ class Task(models.Model):
     state = models.CharField(choices=TASK_STATES, default='ready', max_length=100)
     is_complete = models.BooleanField(default=False) 
     is_archived = models.BooleanField(default=False)
+    start_on = models.DateTimeField(null=True)
+    end_on = models.DateTimeField(null=True)
     completed_on = models.DateTimeField(null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
