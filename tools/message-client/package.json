@@ -1,0 +1,15 @@
+{
+  "name": "messaging-client",
+  "version": "1.0.0",
+  "description": "Admin messaging client for Assist app.",
+  "main": "index.js",
+  "dependencies": {
+    "sendbird": "^3.0.17"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hasham Ali",
+  "license": "ISC"
+}
