@@ -711,13 +711,13 @@
       "client": 2,
       "assistant": null,
       "text": "Testing3",
-      "task_type": 1,
+      "task_type": 2,
       "state": "ready",
       "is_complete": false,
       "is_archived": false,
       "completed_on": null,
-      "created_on": "2016-11-10T19:48:21.226Z",
-      "updated_on": "2016-11-10T19:48:21.226Z"
+      "created_on": "2016-11-12T19:48:21.226Z",
+      "updated_on": "2016-11-12T19:48:21.226Z"
     }
   },
   {
@@ -727,13 +727,13 @@
       "client": 2,
       "assistant": null,
       "text": "Testing5",
-      "task_type": 1,
+      "task_type": 5,
       "state": "ready",
       "is_complete": false,
       "is_archived": false,
       "completed_on": null,
-      "created_on": "2016-11-10T20:14:08.657Z",
-      "updated_on": "2016-11-10T20:14:08.657Z"
+      "created_on": "2016-11-12T20:14:08.657Z",
+      "updated_on": "2016-11-12T20:14:08.657Z"
     }
   },
   {
@@ -743,13 +743,109 @@
       "client": 2,
       "assistant": null,
       "text": "Testing10",
-      "task_type": 3,
+      "task_type": 1,
       "state": "ready",
       "is_complete": false,
       "is_archived": true,
       "completed_on": null,
       "created_on": "2016-11-10T20:15:36.123Z",
       "updated_on": "2016-11-10T21:10:07.327Z"
+    }
+  },
+  {
+    "model": "assist_co_server.task",
+    "pk": 8,
+    "fields": {
+      "client": 2,
+      "assistant": null,
+      "text": "Testing10",
+      "task_type": 3,
+      "state": "completed",
+      "is_complete": true,
+      "is_archived": false,
+      "completed_on": null,
+      "created_on": "2016-11-10T20:15:36.123Z",
+      "updated_on": "2016-11-10T21:10:07.327Z"
+    }
+  },
+  {
+    "model": "assist_co_server.task",
+    "pk": 9,
+    "fields": {
+      "client": 2,
+      "assistant": null,
+      "text": "Testing10",
+      "task_type": 2,
+      "state": "completed",
+      "is_complete": true,
+      "is_archived": false,
+      "completed_on": null,
+      "created_on": "2016-11-10T20:15:36.123Z",
+      "updated_on": "2016-11-10T21:10:07.327Z"
+    }
+  },
+  {
+    "model": "assist_co_server.task",
+    "pk": 10,
+    "fields": {
+      "client": 2,
+      "assistant": null,
+      "text": "Testing10",
+      "task_type": 2,
+      "state": "completed",
+      "is_complete": true,
+      "is_archived": false,
+      "completed_on": null,
+      "created_on": "2016-12-10T20:15:36.123Z",
+      "updated_on": "2016-12-10T21:10:07.327Z"
+    }
+  },
+  {
+    "model": "assist_co_server.task",
+    "pk": 11,
+    "fields": {
+      "client": 2,
+      "assistant": null,
+      "text": "Testing10",
+      "task_type": 5,
+      "state": "completed",
+      "is_complete": true,
+      "is_archived": false,
+      "completed_on": null,
+      "created_on": "2016-12-10T20:15:36.123Z",
+      "updated_on": "2016-12-10T21:10:07.327Z"
+    }
+  },
+  {
+    "model": "assist_co_server.task",
+    "pk": 12,
+    "fields": {
+      "client": 2,
+      "assistant": null,
+      "text": "Testing10",
+      "task_type": 6,
+      "state": "completed",
+      "is_complete": true,
+      "is_archived": false,
+      "completed_on": null,
+      "created_on": "2016-12-10T20:15:36.123Z",
+      "updated_on": "2016-12-10T21:10:07.327Z"
+    }
+  },
+  {
+    "model": "assist_co_server.task",
+    "pk": 13,
+    "fields": {
+      "client": 2,
+      "assistant": null,
+      "text": "Testing10",
+      "task_type": 4,
+      "state": "completed",
+      "is_complete": true,
+      "is_archived": false,
+      "completed_on": null,
+      "created_on": "2016-12-08T20:15:36.123Z",
+      "updated_on": "2016-12-08T21:10:07.327Z"
     }
   }
 ]
