@@ -9,10 +9,10 @@
 3. Clone the repository `git clone https://github.com/Assist-co/server.git`
 	* Change directory to the project `cd server`
 4. Create a Pyton virtual environment and start it
-	* Execute `virtualenv venv` 
+	* Execute `virtualenv venv`
 	* Execute `source venv/bin/activate` To deactivate just enter `deactivate`
 5. Install project packages. Execute `pip install -r requirements.txt`
-6. Run migrations `python manage.py migrate` 
+6. Run migrations `python manage.py migrate`
 7. Load initial data `python manage.py loaddata seed.json`
 8. Create a superuser account to login : `python manage.py createsuperuser`
 9. Start the server `python manage.py runserver`!
@@ -22,6 +22,14 @@
 
 Assist-Co Server is based on the [Django-Rest-Framework](http://www.django-rest-framework.org)
 
+#### Messaging Client
+
+To interact with a user, you can use the messaging client which is configured to send messages from the Assistant's point of view. To set up:
+
+1. Move into the message-client directory: ```cd tools/message-client```
+2. Install dependencies: ```npm install```
+3. Open index.html in a browser: ``` open index.html```
+
 
 ## Requests
 
@@ -30,7 +38,7 @@ Assist-Co Server is based on the [Django-Rest-Framework](http://www.django-rest-
 By default in development authentication is turned off designated by the `DEBUG=True`
 in the settings.py file. To turn on authentication set `DEBUG=False` and Token
 authentication will be on. At this point you will need to pass in the Token as
-a header. 
+a header.
 
 `Authorization: Token ae5595db528c4813c4810231cedd3e8290f4b83c`
 
