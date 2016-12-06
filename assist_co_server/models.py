@@ -68,7 +68,7 @@ class Client(User):
     class Meta:
         db_table = 'clients'
     primary_assistant = models.ForeignKey(Assistant, null=True)
-    phone = PhoneNumberField(blank=True, null=True, unique=True)
+    phone = models.CharField(max_length=30, null=True)
     profession = models.ForeignKey(Profession)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -92,8 +92,8 @@ class Contact(models.Model):
         db_table = 'contacts'
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone = PhoneNumberField(blank=True, null=True)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=30, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     client = models.ForeignKey(Client, null=True, default=None)
