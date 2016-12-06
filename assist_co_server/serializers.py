@@ -193,7 +193,7 @@ class TaskSerializer(serializers.ModelSerializer):
     client_id = serializers.SlugRelatedField(many=False, slug_field='id', 
         queryset=Client.objects.all(), write_only=True)
     assistant = AssistantSerializer(many=False, read_only=True)
-    contacts = ContactSerializer(many=True, read_only=True)
+    contacts = ContactSerializer(many=True)
     
     class Meta:
         model = Task
@@ -205,8 +205,16 @@ class TaskSerializer(serializers.ModelSerializer):
             raise exceptions.ValidationError('No task type exists for permalink {}'.format(task_type.permalink))
         return task_type
 
+    def validate_contacts(self, contacts):
+        for contact_attrs in contacts:
+            phone = contact_attrs['phone']
+            email = contact_attrs['email']
+            if not phone and not email:
+                raise exceptions.ValidationError('Must include email and/or phone number for contact')
+        return contacts
+
     def create(self, attrs):
-        return Task.objects.create(
+        task = Task.objects.create(
             text=attrs['text'], 
             client_id=attrs['client_id'].id, 
             task_type_id=attrs['task_type'].id,
@@ -214,3 +222,20 @@ class TaskSerializer(serializers.ModelSerializer):
             start_on=attrs['start_on'] if 'start_on' in attrs else None,
             end_on=attrs['end_on'] if 'end_on' in attrs else None,
         )
+        contact_objs = []
+        for contact_attrs in attrs['contacts']:
+            c_obj = Contact.objects.create(
+                first_name=contact_attrs['first_name'],
+                last_name=contact_attrs['last_name'],
+                email=contact_attrs['email'],
+                phone=contact_attrs['phone'],
+                client_id=contact_attrs['client_id'].id,
+            )
+            contact_objs.append(c_obj)
+        task.contacts.add(*contact_objs)
+        task.save()
+        return task
+
+
+
+
