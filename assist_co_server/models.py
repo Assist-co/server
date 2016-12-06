@@ -124,7 +124,7 @@ class Task(models.Model):
     client = models.ForeignKey(Client)
     assistant = models.ForeignKey(Assistant, null=True)
     text = models.TextField()
-    location = models.CharField(null=True, max_length=30) # (40.76,-73.984)
+    location = models.CharField(null=True, max_length=100) # (40.76,-73.984)
     contacts = models.ManyToManyField(Contact)
     task_type = models.ForeignKey(TaskType, null=False)
     state = models.CharField(choices=TASK_STATES, default='ready', max_length=100)
