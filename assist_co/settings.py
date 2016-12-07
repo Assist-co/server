@@ -133,7 +133,7 @@ USE_TZ = True
 
 # Django-Auth
 
-AUTHENTICATION_BACKENDS = ('assist_co_server.auth_backends.EmailBackend',)
+AUTHENTICATION_BACKENDS = ('assist_co_server.auth_backends.ModelBackend',)
 
 
 

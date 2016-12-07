@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+admin.autodiscover()
 
 from rest_framework.routers import DefaultRouter
 
@@ -50,8 +51,12 @@ urlpatterns = [
     # Client urls
     url(r'^api/clients$', ClientsView.as_view()),
     url(r'^api/clients/(?P<id>[0-9]+)$', ClientDetailView.as_view()),
-    
+
     # Assistant urls
     url(r'^api/assistants$', AssistantsView.as_view()),
-    url(r'^api/assistants/(?P<id>[0-9]+)$', AssistantDetailView.as_view()), 
+    url(r'^api/assistants/(?P<id>[0-9]+)$', AssistantDetailView.as_view()),
+
+    # Admin
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 ]
