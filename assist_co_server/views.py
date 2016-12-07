@@ -62,7 +62,7 @@ class ClientSignupView(APIView):
                 date_of_birth=data['date_of_birth']
             )
             token = client.get_or_create_token()
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
+            return Response({'token': token.key, 'client_id': client.id}, status=status.HTTP_200_OK)
         else:
             return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
