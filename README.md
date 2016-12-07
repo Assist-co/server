@@ -33,7 +33,7 @@ To interact with a user, you can use the messaging client which is configured to
 
 ## Requests
 
-### Authentication
+### Production - Authentication
 
 By default in development authentication is turned off designated by the `DEBUG=True`
 in the settings.py file. To turn on authentication set `DEBUG=False` and Token
@@ -45,6 +45,11 @@ a header.
 Where the key is `Authorization` and the value is `Token <token>`
 
 
-## TODO
-1. Add support for images (profile images and urls)
-2. Missing waking hours field on Client
+## DEMO
+
+1. Run `ipconfig getifaddr en0` or go to `System Preferences > Network` to get your machine's IP on the current network.
+2. Add your machines IP to the `ALLOWED_HOSTS` config in your server's `server > settings.py > ALLOWED_HOSTS`
+3. Run `python manage.py runserver <ip_from_step_1>:8000`
+4. Add your machines IP to the `ALLOWED_HOSTS` config in your server's settings `server > settings.py > ALLOWED_HOSTS`
+5. Make sure the AssistCo iOS App is using the ip. In Xcode go to `Constants.swift` and update the `devURLString` to `http://<ip_from_step_1>:8000/api`
+6. Install app on phone from Xcode.
