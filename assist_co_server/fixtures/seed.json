@@ -700,8 +700,24 @@
       "is_complete": false,
       "is_archived": false,
       "completed_on": null,
-      "created_on": "2016-11-10T19:27:24.972Z",
-      "updated_on": "2016-11-10T19:27:24.973Z"
+      "created_on": "2016-11-12T19:27:24.972Z",
+      "updated_on": "2016-11-12T19:27:24.973Z"
+    }
+  },
+  {
+    "model": "assist_co_server.task",
+    "pk": 40,
+    "fields": {
+      "client": 2,
+      "assistant": null,
+      "text": "Set up a meeting with Mike for tomorrow at 4pm",
+      "task_type": 1,
+      "state": "ready",
+      "is_complete": false,
+      "is_archived": false,
+      "completed_on": null,
+      "created_on": "2016-11-15T19:27:24.972Z",
+      "updated_on": "2016-11-15T19:27:24.973Z"
     }
   },
   {
