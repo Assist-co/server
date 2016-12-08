@@ -662,7 +662,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing2",
+      "text": "Can you see if any of the analysts have a light workload this week? Set up a time where I can meet with one of them, I need assistance on a project.",
       "task_type": 1,
       "state": "ready",
       "is_complete": false,
@@ -678,7 +678,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing2",
+      "text": "Can you ping Caroline and see if she'd like to meet up for coffee this weekend?",
       "task_type": 1,
       "state": "ready",
       "is_complete": false,
@@ -694,7 +694,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing3",
+      "text": "Please set up an onsite interview with our candidate David. His email is david.daniels@gmail.com",
       "task_type": 1,
       "state": "ready",
       "is_complete": false,
@@ -710,7 +710,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing3",
+      "text": "Can you send out the weekly office newsletter when Marcy finishes putting together the content?",
       "task_type": 2,
       "state": "ready",
       "is_complete": false,
@@ -722,11 +722,27 @@
   },
   {
     "model": "assist_co_server.task",
+    "pk": 25,
+    "fields": {
+      "client": 2,
+      "assistant": null,
+      "text": "Please call Jonathan and walk him through our onboarding process",
+      "task_type": 3,
+      "state": "ready",
+      "is_complete": false,
+      "is_archived": false,
+      "completed_on": null,
+      "created_on": "2016-11-14T19:48:21.226Z",
+      "updated_on": "2016-11-14T19:48:21.226Z"
+    }
+  },
+  {
+    "model": "assist_co_server.task",
     "pk": 6,
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing5",
+      "text": "Can you find out what the best venues are for holding a company offsite? Something in San Francisco.",
       "task_type": 5,
       "state": "ready",
       "is_complete": false,
@@ -738,11 +754,27 @@
   },
   {
     "model": "assist_co_server.task",
+    "pk": 6,
+    "fields": {
+      "client": 2,
+      "assistant": null,
+      "text": "Can you find out what the best venues are for holding a company offsite? Something in San Francisco.",
+      "task_type": 5,
+      "state": "ready",
+      "is_complete": false,
+      "is_archived": false,
+      "completed_on": null,
+      "created_on": "2016-11-14T20:14:08.657Z",
+      "updated_on": "2016-11-14T20:14:08.657Z"
+    }
+  },
+  {
+    "model": "assist_co_server.task",
     "pk": 7,
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing10",
+      "text": "Hey Hasham, could you ping Daniel with an explanation of how our company expenses should be filed? It should be the same email you sent to Sarah.",
       "task_type": 1,
       "state": "ready",
       "is_complete": false,
@@ -758,7 +790,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing10",
+      "text": "Can you give David a call and explain to him that we will not be moving forward with his application? Go easy on him.",
       "task_type": 3,
       "state": "completed",
       "is_complete": true,
@@ -774,7 +806,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing10",
+      "text": "Send an email to our subscribers letting them know that the rest of the month is free",
       "task_type": 2,
       "state": "completed",
       "is_complete": true,
@@ -790,7 +822,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing10",
+      "text": "Could you put together an onboarding list to send to new hires?",
       "task_type": 2,
       "state": "completed",
       "is_complete": true,
@@ -806,7 +838,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing10",
+      "text": "Please do some research and compile a list of our company's competitors.",
       "task_type": 5,
       "state": "completed",
       "is_complete": true,
@@ -822,7 +854,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing10",
+      "text": "Please set up an escalating reminder tomorrow to make sure I make it to the airport for my flight at 8am",
       "task_type": 6,
       "state": "completed",
       "is_complete": true,
@@ -838,7 +870,7 @@
     "fields": {
       "client": 2,
       "assistant": null,
-      "text": "Testing10",
+      "text": "Remind me to get to the gym tomorrow at 7pm",
       "task_type": 4,
       "state": "completed",
       "is_complete": true,
